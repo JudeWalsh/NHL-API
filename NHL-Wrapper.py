@@ -9,7 +9,10 @@ class NHLAPIWrapper:
         self.base_url = base_url
         self.stats_url = stats_url
 
-    def GetPlayerStats(self):
+    def allskaterstats(self):
+
+        stats = []
+
         for i in range(8):
             start = i*100
             url = self.stats_url + f"/en/skater/summary?limit=100&start={start}&sort=points&cayenneExp=seasonId=20232024"
@@ -18,14 +21,17 @@ class NHLAPIWrapper:
 
             # Check if the request was successful (status code 200)
             if response.status_code == 200:
-                # Parse the JSON content of the response
                 data = response.json()
-                print(json.dumps(data, indent=4))
+                stats += data['data']
             else:
                 # Print an error message if the request was not successful
-                print("Error:", response.status_code, response.text)
+                return [response.status_code, response.text]
 
-    def playerBio(self, playerid):
+        player_dict = {int(player['playerId']): player for player in stats}
+
+        return player_dict
+
+    def skaterbio(self, playerid):
         url = self.base_url + f"v1/player/{playerid}/landing"
 
         response = requests.get(url)
@@ -60,34 +66,12 @@ class NHLAPIWrapper:
 
         return final
 
-    def playerSummary(self, playerid):
+    def skatersummary(self, playerid):
         url = self.base_url + f"v1/player/{playerid}/landing"
 
         response = requests.get(url)
 
         data = response.json()
-
-        '''
-        games played
-        goals
-        assists
-        points
-        plus minus
-        pim
-        p\GP
-        EVG
-        EVP
-        PPG
-        PPP
-        SHG
-        SHP
-        OTG
-        GWG
-        S
-        S%
-        TOI/GP
-        FOW%
-        '''
 
         curr_season_stats = data['seasonTotals'][-1]
 
@@ -100,10 +84,47 @@ class NHLAPIWrapper:
 
         return curr_season_stats
 
+    def faceoffs(self):
+
+        stats = []
+
+        for i in range(8):
+            start = i * 100
+            url = self.stats_url + f"/en/skater/faceoffpercentages?limit=100&start={start}&sort=totalFaceoffs&cayenneExp=seasonId=20232024"
+            # Make a GET request
+            response = requests.get(url)
+
+            # Check if the request was successful (status code 200)
+            if response.status_code == 200:
+                data = response.json()
+                stats += data['data']
+            else:
+                # Print an error message if the request was not successful
+                return [response.status_code, response.text]
+
+        player_dict = {int(player['playerId']): player for player in stats}
+
+        return player_dict
 
 obj = NHLAPIWrapper()
 
-info = obj.playerSummary(8476453)
-
+info = obj.skatersummary(8476468)
+base_stats = obj.allskaterstats()
+faceoff_stats = obj.faceoffs()
+#
 print(json.dumps(info, indent=4))
+print(json.dumps(base_stats[8476468], indent=4))
+print(json.dumps(faceoff_stats[8476468], indent=4))
 
+keys_set1 = set(info.keys())
+keys_set2 = set(base_stats[8476468].keys())
+keys_set3 = set(faceoff_stats[8476468].keys())
+
+# Check for intersection (common keys) between sets
+common_keys = keys_set1.intersection(keys_set2, keys_set3)
+
+if common_keys:
+    print("Duplicate keys found:")
+    print(common_keys)
+else:
+    print("No duplicate keys found.")
