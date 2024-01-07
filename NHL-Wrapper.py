@@ -289,14 +289,11 @@ class NHLAPIWrapper:
 
     def skater_summary(self, skaterID):
         '''
-        Returns dict of every NHL Player's summary report
 
-        PlayerID : {}
+        Retrieve summary report for a player for each season he played
 
-        A, EVG, EVP, FOW%, GWG, GP, G, lastname, OTG, PIM, playerID, plusMinus,
-        P, P/GP, Pos, PPG, PPP, SeasonID, SHG, SHP, S/C, Shots, full name, team, TOI
-
-        Faceoff winPCT is dropped as it is part of the faceoff report
+        :param skaterID: playerID of the player to get reports from
+        :return: list of dict where each dict is a season's summary report for the player
         '''
 
         final = []
@@ -330,18 +327,11 @@ class NHLAPIWrapper:
 
     def skater_bio(self, skaterID):
         '''
-        Returns dict of every NHL Player's Bio report
 
-        PlayerID : {}
+        Retrieve bio report for a player for each season he played
 
-        Where dict has the following stats:
-        A, birth city, birth country, birthdate, birth state/province code,
-        current team, draft overall, draft round, draft year, first season, games played,
-        G, height, in hall of fame, last name, nationality code, playerid, points
-
-        Following keys are popped as they are duplicated in the summary report:
-        Assists, goals, points, games played, lastname, playerid, team, in hall of fame
-
+        :param skaterID: playerID of the player to get report from
+        :return: dict of the player's bio information
         '''
         final = []
 
@@ -387,18 +377,11 @@ class NHLAPIWrapper:
 
     def skater_FO_percent(self, skaterID):
         '''
-        Returns dict of every NHL Player's faceoff percentages
 
-        PlayerID : {}
+        Retrieve Faceoff percent report for a player for each season he played
 
-        Where dict has the following stats:
-        D Zone FO%, D Zone FO total, evFO%, evFO total, FO%, GP, lastname, N Zone FO%, N Zone total,
-        O Zone FO%, O Zone FO Totals, playerID, position, PPFO%, PPFO total, SeasonID, Shoots/catches,
-        full name, team name, TOI, FO totals
-
-        Following keys are popped as they are duplicated in the summary report:
-        GP, lastname, playerID, position, seasonID, shoots/catches, name, team name, TOI
-
+        :param skaterID: playerID of the player to get reports from
+        :return: list of dict where each dict is a season's faceoff percent report for the player
         '''
         final = []
 
@@ -429,18 +412,11 @@ class NHLAPIWrapper:
 
     def skater_FO_wins(self, skaterID):
         '''
-        Returns dict of every NHL Player's faceoff wins
 
-        PlayerID : {}
+        Retrieve Faceoff win report for a player for each season he played
 
-        Where dict has the following stats:
-        D Zone FO%, D Zone FO total, evFO%, evFO total, FO%, GP, lastname, N Zone FO%, N Zone total,
-        O Zone FO%, O Zone FO Totals, playerID, position, PPFO%, PPFO total, SeasonID, Shoots/catches,
-        full name, team name, TOI, FO totals
-
-        Following keys are popped as they are duplicated in the summary report:
-        GP, lastname, playerID, position, seasonID, shoots/catches, name, team name, TOI
-
+        :param skaterID: playerID of the player to get reports from
+        :return: list of dict where each dict is a season's faceoff win report for the player
         '''
         final = []
 
@@ -465,15 +441,11 @@ class NHLAPIWrapper:
 
     def skater_misc(self, skaterID):
         '''
-        Returns dict of every NHL Player's miscellaneous stats
 
-        PlayerID : {}
+        Retrieve miscellaneous percent report for a player for each season he played
 
-        Where dict has the following stats:
-        blocked shots, blocked shots per 60, empty net assists, empty net goals,
-        empty net points, first goals, giveaways, giveaways per 60, hits,
-        hits per 60, missed shot crossbar, missed shot goalpost, missed shot over net,
-        missed shot wide of not, missed shots, takeaways, takeaways per 60
+        :param skaterID: playerID of the player to get reports from
+        :return: list of dict where each dict is a season's miscellaneous report for the player
         '''
         final = []
 
@@ -498,14 +470,11 @@ class NHLAPIWrapper:
 
     def skater_TOI(self, skaterID):
         '''
-        Returns dict of every NHL Player's time on ice stats
 
-        PlayerID : {}
+        Retrieve time on ice percent report for a player for each season he played
 
-        Where dict has the following stats:
-        evTOI, evTOI/G, otTOI, otTOI/G, ppTOI, ppTOI/G, shTOI, shTOI/G, shifts, shifts/G,
-        TOI, TOI/G, TOI/shift
-
+        :param skaterID: playerID of the player to get reports from
+        :return: list of dict where each dict is a season's time on ice report for the player
         '''
         final = []
 
