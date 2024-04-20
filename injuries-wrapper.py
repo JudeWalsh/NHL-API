@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 
 csv_filename = 'NHL Injury Database_data.csv'
 
-df = pd.read_csv(csv_filename)
+df = pd.read_csv(csv_filename, delimiter='\t', encoding='utf-16')
+print(df.head(5))
 
 df = df.drop('Chip', axis=1)
 df = df.drop('Cap Hit', axis=1)
