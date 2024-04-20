@@ -9,6 +9,50 @@ class NHLAPIWrapper:
     def __init__(self, base_url='https://api-web.nhle.com/', stats_url='https://api.nhle.com/stats/rest'):
         self.base_url = base_url
         self.stats_url = stats_url
+        self.ID_dict = {}
+        self.create_ID_dict()
+
+    def get_current_season(self):
+        url = self.base_url + 'v1/season'
+        response = requests.get(url)
+        if response.status_code == 200:
+            season = response.json()
+            curr_season = int(str(season[-1])[:4])
+            return curr_season
+        else:
+            return [response.status_code, response.text]
+
+    def create_ID_dict(self):
+        '''
+        Populates the ID dictionary
+        Maps player names to their unique identifier
+        '''
+        id_dict = {}  # Initialize an empty dictionary to store the mappings
+
+        # Iterate over the range of pages (assuming there are 8 pages)
+        for i in range(8):
+            start = i * 100
+            url = self.stats_url + f"/en/skater/summary?limit=100&start={start}&sort=playerId&cayenneExp=seasonId=20232024"
+
+            # Make a GET request
+            response = requests.get(url)
+
+            # Check if the request was successful (status code 200)
+            if response.status_code == 200:
+                data = response.json()
+                stats = data.get('data', [])  # Get the 'data' list from the response
+
+                # Use a list comprehension to create a list of (skater_full_name, player_id) tuples
+                skater_id_pairs = [(player_data.get('skaterFullName'), player_data.get('playerId')) for player_data in
+                                   stats]
+
+                # Update the id_dict with the pairs from the current page
+                self.ID_dict.update(skater_id_pairs)
+            else:
+                # Print an error message if the request was not successful
+                return [response.status_code, response.text]
+
+
 
     def summaryreport(self):
         '''
@@ -559,10 +603,13 @@ class NHLAPIWrapper:
 
 
 
+
+
 obj = NHLAPIWrapper()
 
-base_stats = obj.skater_misc(8475168)
-
-# obj.skater_report_csv(base_stats)
-
-print(json.dumps(base_stats, indent=4))
+# base_stats = obj.skater_misc(8475168)
+#
+# # obj.skater_report_csv(base_stats)
+#
+# print(json.dumps(obj.ID_dict, indent=4))
+print(obj.get_current_season())
